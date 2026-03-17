@@ -16,12 +16,18 @@ public class Student extends User {
     public String getUsername() {
         return username;
     }
+
     public void setUsername(String username) {
         this.username = username;
     }
 
-    public Enrollment[] getEnrollments() { return enrollments; }
-    public void setEnrollments(Enrollment[] enrollments) { this.enrollments = enrollments; }
+    public Enrollment[] getEnrollments() {
+        return enrollments;
+    }
+
+    public void setEnrollments(Enrollment[] enrollments) {
+        this.enrollments = enrollments;
+    }
 
     public boolean addEnrollment(Enrollment enrollment) {
         for (int i = 0; i < enrollments.length; i++) {

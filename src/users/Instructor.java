@@ -2,7 +2,7 @@ package users;
 
 import materials.Course;
 
-public class Instructor extends User {
+public class Instructor extends Staff {
 
     private double rating;
     private Course[] coursesTaught;
@@ -16,11 +16,22 @@ public class Instructor extends User {
     public double getRating() {
         return rating;
     }
+
     public void setRating(double rating) {
         this.rating = rating;
     }
 
-    public Course[] getCoursesTaught() { return coursesTaught; }
-    public void setCoursesTaught(Course[] coursesTaught) { this.coursesTaught = coursesTaught; }
+    public Course[] getCoursesTaught() {
+        return coursesTaught;
+    }
+
+    public void setCoursesTaught(Course[] coursesTaught) {
+        this.coursesTaught = coursesTaught;
+    }
+
+    @Override
+    public String getRoleLabel() {
+        return "INSTRUCTOR";
+    }
 
 }

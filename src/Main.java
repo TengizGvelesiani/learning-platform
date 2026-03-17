@@ -6,6 +6,7 @@ import materials.Lesson;
 import materials.Module;
 import materials.Question;
 import materials.Quiz;
+import service.DisplayService;
 import service.PurchaseService;
 import service.PlatformRegistry;
 import users.Admin;
@@ -30,31 +31,39 @@ public class Main {
 
         Question question1 = new Question("What is the size of int in Java?");
         Question question2 = new Question("What does JVM stand for?");
-        Quiz quiz = new Quiz(15, new Question[] { question1, question2 });
+        Quiz quiz = new Quiz(15, new Question[]{question1, question2});
 
-        Module module = new Module("Java Basics", new Lesson[] { lesson1, lesson2 }, quiz);
+        Module module = new Module("Java Basics", new Lesson[]{lesson1, lesson2}, quiz);
         Course course = new Course(
                 "Intro to Java",
                 new BigDecimal("99.00"),
                 instructor,
                 2,
-                new Module[] { module }
+                new Module[]{module}
         );
 
-        instructor.setCoursesTaught(new Course[] { course });
+        instructor.setCoursesTaught(new Course[]{course});
 
         Student student = new Student("Ana", "Johnson", "student@example.com", "anaJ", 3);
         Payment payment = new Payment(new BigDecimal("120.00"));
 
         LearningPlatform platform = new LearningPlatform(
                 "Global Learning Platform",
-                new Course[] { course },
-                new Student[] { student },
-                new Instructor[] { instructor },
-                new Admin[] { admin }
+                new Course[]{course},
+                new Student[]{student},
+                new Instructor[]{instructor},
+                new Admin[]{admin}
         );
 
         PurchaseService service = new PurchaseService();
+
+        DisplayService displayService = new DisplayService();
+        displayService.setFeaturedMaterial(course);
+        displayService.printMaterialSummary(displayService.getFeaturedMaterial());
+        displayService.setFeaturedMaterial(module);
+        displayService.printMaterialSummary(displayService.getFeaturedMaterial());
+        displayService.printMaterialSummary(lesson1);
+        displayService.printMaterialSummary(quiz);
 
         service.previewPurchase(student, course, payment);
         service.buyCourse(student, course, payment);
