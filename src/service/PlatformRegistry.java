@@ -10,6 +10,11 @@ public class PlatformRegistry {
         System.out.println(platformName + " initialized.");
     }
 
-    public static void incrementEnrollment() { totalEnrollments++; }
-    public static int getTotalEnrollments() { return totalEnrollments; }
+    public static void incrementEnrollment() {
+        totalEnrollments++;
+    }
+
+    public static int getTotalEnrollments() {
+        return totalEnrollments;
+    }
 }

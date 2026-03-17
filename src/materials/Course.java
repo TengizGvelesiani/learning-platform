@@ -1,13 +1,13 @@
 package materials;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import users.Instructor;
 import interactions.Enrollment;
 
-public class Course {
+public class Course extends Material {
 
-    private String title;
     private BigDecimal price;
     private Instructor instructor;
     private int limit;
@@ -15,7 +15,7 @@ public class Course {
     private Enrollment[] enrollments;
 
     public Course(String title, BigDecimal price, Instructor instructor, int limit, Module[] modules) {
-        this.title = title;
+        super(title);
         this.price = price;
         this.instructor = instructor;
         this.limit = limit;
@@ -23,23 +23,53 @@ public class Course {
         this.enrollments = new Enrollment[limit];
     }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public String getTitle() {
+        return name;
+    }
 
-    public BigDecimal getPrice() { return price; }
-    public void setPrice(BigDecimal price) { this.price = price; }
+    public void setTitle(String title) {
+        this.name = title;
+    }
 
-    public Instructor getInstructor(){ return instructor; }
-    public void setInstructor(Instructor instructor) { this.instructor = instructor; }
+    public BigDecimal getPrice() {
+        return price;
+    }
 
-    public int getLimit() { return limit; }
-    public void setLimit(int limit) { this.limit = limit; }
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
 
-    public Module[] getModules() { return modules; }
-    public void setModules(Module[] modules) { this.modules = modules; }
+    public Instructor getInstructor() {
+        return instructor;
+    }
 
-    public Enrollment[] getEnrollments() { return enrollments; }
-    public void setEnrollments(Enrollment[] enrollments) { this.enrollments = enrollments; }
+    public void setInstructor(Instructor instructor) {
+        this.instructor = instructor;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
+    }
+
+    public Module[] getModules() {
+        return modules;
+    }
+
+    public void setModules(Module[] modules) {
+        this.modules = modules;
+    }
+
+    public Enrollment[] getEnrollments() {
+        return enrollments;
+    }
+
+    public void setEnrollments(Enrollment[] enrollments) {
+        this.enrollments = enrollments;
+    }
 
     public int getEnrolledStudentsCount() {
         int count = 0;
@@ -63,5 +93,34 @@ public class Course {
             }
         }
         return false;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return "Course: " + name;
+    }
+
+    @Override
+    public String toString() {
+        return "Course{title='" + name + "', price=" + price +
+                ", instructorEmail='" + (instructor == null ? null : instructor.getEmail()) + "'" +
+                ", limit=" + limit +
+                ", enrolled=" + getEnrolledStudentsCount() +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return Objects.equals(name, course.name) &&
+                Objects.equals(instructor == null ? null : instructor.getEmail(),
+                        course.instructor == null ? null : course.instructor.getEmail());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, instructor == null ? null : instructor.getEmail());
     }
 }
