@@ -34,6 +34,10 @@ public abstract class User {
         return email;
     }
 
+    public final String getContactLabel() {
+        return name + " <" + email + ">";
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }

@@ -3,6 +3,7 @@ package service;
 import contracts.Enrollable;
 import contracts.Displayable;
 import contracts.MoneyMovable;
+import contracts.ProfileSummarizable;
 import contracts.RoleAssignable;
 import contracts.Statused;
 import interactions.Enrollment;
@@ -33,23 +34,27 @@ public final class DisplayService {
         this.featuredMaterial = featuredMaterial;
     }
 
-    public final void printMaterialSummary(Displayable material) {
+    public void printMaterialSummary(Displayable material) {
         System.out.println(PREFIX + " " + material.getDisplayName());
     }
 
-    public final void printRole(RoleAssignable staff) {
+    public void printRole(RoleAssignable staff) {
         System.out.println(PREFIX + " Role: " + staff.getRoleLabel());
     }
 
-    public final void printStatus(Statused record) {
+    public void printProfile(ProfileSummarizable profile) {
+        System.out.println(PREFIX + " " + profile.getProfileSummary());
+    }
+
+    public void printStatus(Statused record) {
         System.out.println(PREFIX + " Status: " + record.getStatus());
     }
 
-    public final void printAmount(MoneyMovable money) {
+    public void printAmount(MoneyMovable money) {
         System.out.println(PREFIX + " Amount: " + money.getAmount());
     }
 
-    public final void printEnrollmentCount(Enrollable enrollable) {
+    public void printEnrollmentCount(Enrollable enrollable) {
         Enrollment[] enrollments = enrollable.getEnrollments();
         int count = 0;
         for (Enrollment e : enrollments) {

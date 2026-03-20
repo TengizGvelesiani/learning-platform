@@ -1,8 +1,9 @@
 package users;
 
+import contracts.ProfileSummarizable;
 import materials.Course;
 
-public class Instructor extends Staff {
+public class Instructor extends Staff implements ProfileSummarizable {
 
     private double rating;
     private Course[] coursesTaught;
@@ -32,6 +33,11 @@ public class Instructor extends Staff {
     @Override
     public String getRoleLabel() {
         return "INSTRUCTOR";
+    }
+
+    @Override
+    public String getProfileSummary() {
+        return "Instructor " + getContactLabel() + ", rating " + rating;
     }
 
 }

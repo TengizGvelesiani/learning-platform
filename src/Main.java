@@ -71,6 +71,8 @@ public class Main {
 
         displayService.printRole(admin);
         displayService.printRole(instructor);
+        displayService.printProfile(admin);
+        displayService.printProfile(instructor);
         displayService.printAmount(payment);
         displayService.printEnrollmentCount(student);
         if (enrollment != null) {
