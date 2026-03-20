@@ -37,7 +37,7 @@ public class PurchaseService {
 
         PlatformRegistry.incrementEnrollment();
 
-        System.out.println("Payment Approved for: " + student.getEmail());
+        System.out.println("Payment Approved for: " + student.getContactLabel());
         System.out.println("Course: " + course.getTitle() + " has been added to dashboard.");
 
         Certificate certificate = new Certificate(LocalDate.now(), student, course);

@@ -1,6 +1,8 @@
 package users;
 
-public class Admin extends Staff {
+import contracts.ProfileSummarizable;
+
+public class Admin extends Staff implements ProfileSummarizable {
 
     private int accessLevel;
 
@@ -20,5 +22,10 @@ public class Admin extends Staff {
     @Override
     public String getRoleLabel() {
         return "ADMIN";
+    }
+
+    @Override
+    public String getProfileSummary() {
+        return "Admin " + getContactLabel() + ", access level " + accessLevel;
     }
 }
