@@ -1,8 +1,9 @@
 package interactions;
 
+import contracts.MoneyMovable;
 import java.math.BigDecimal;
 
-public class Payment extends Transaction {
+public class Payment extends Transaction implements MoneyMovable {
 
     private BigDecimal amount;
 

@@ -1,6 +1,8 @@
 package interactions;
 
-public abstract class Record {
+import contracts.Statused;
+
+public abstract class Record implements Statused {
 
     protected String status;
 

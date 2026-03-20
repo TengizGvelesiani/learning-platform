@@ -1,8 +1,9 @@
 package materials;
 
+import contracts.Displayable;
 import java.util.Objects;
 
-public abstract class Material {
+public abstract class Material implements Displayable {
 
     protected String name;
 

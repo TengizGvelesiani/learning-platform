@@ -1,5 +1,6 @@
 import java.math.BigDecimal;
 
+import interactions.Enrollment;
 import interactions.Payment;
 import materials.Course;
 import materials.Lesson;
@@ -66,10 +67,23 @@ public class Main {
         displayService.printMaterialSummary(quiz);
 
         service.previewPurchase(student, course, payment);
-        service.buyCourse(student, course, payment);
+        Enrollment enrollment = service.buyCourse(student, course, payment);
+
+        displayService.printRole(admin);
+        displayService.printRole(instructor);
+        displayService.printAmount(payment);
+        displayService.printEnrollmentCount(student);
+        if (enrollment != null) {
+            displayService.printStatus(enrollment);
+            if (enrollment.getCertificate() != null) {
+                displayService.printStatus(enrollment.getCertificate());
+            }
+        }
 
         System.out.println("Total enrollments: " + PlatformRegistry.getTotalEnrollments());
         System.out.println("Platform: " + platform.getName());
+
+
     }
 }
 

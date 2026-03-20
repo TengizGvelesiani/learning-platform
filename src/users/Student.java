@@ -1,8 +1,9 @@
 package users;
 
+import contracts.Enrollable;
 import interactions.Enrollment;
 
-public class Student extends User {
+public class Student extends User implements Enrollable {
 
     private String username;
     private Enrollment[] enrollments;
