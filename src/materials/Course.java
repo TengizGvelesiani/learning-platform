@@ -95,6 +95,19 @@ public class Course extends Material {
         return false;
     }
 
+    public boolean removeEnrollment(Enrollment enrollment) {
+        if (enrollment == null) {
+            return false;
+        }
+        for (int i = 0; i < enrollments.length; i++) {
+            if (enrollments[i] == enrollment) {
+                enrollments[i] = null;
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public String getDisplayName() {
         return "Course: " + name;
