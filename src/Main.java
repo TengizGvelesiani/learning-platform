@@ -1,5 +1,7 @@
 import java.math.BigDecimal;
 
+import exceptions.EnrollmentCapacityException;
+import exceptions.InsufficientFundsException;
 import interactions.Enrollment;
 import interactions.Payment;
 import materials.Course;
@@ -8,8 +10,8 @@ import materials.Module;
 import materials.Question;
 import materials.Quiz;
 import service.DisplayService;
-import service.PurchaseService;
 import service.PlatformRegistry;
+import service.PurchaseService;
 import users.Admin;
 import users.Instructor;
 import users.Student;
@@ -67,7 +69,22 @@ public class Main {
         displayService.printMaterialSummary(quiz);
 
         service.previewPurchase(student, course, payment);
-        Enrollment enrollment = service.buyCourse(student, course, payment);
+
+        Student lowBalanceStudent = new Student("Pat", "Poor", "poor@example.com", "patP", 3);
+        try {
+            service.buyCourse(lowBalanceStudent, course, new Payment(new BigDecimal("10.00")));
+        } catch (EnrollmentCapacityException e) {
+            System.err.println("[Handled checked exception] " + e.getMessage());
+        } catch (InsufficientFundsException e) {
+            System.out.println("[Handled runtime exception] " + e.getMessage());
+        }
+
+        Enrollment enrollment = null;
+        try {
+            enrollment = service.buyCourse(student, course, payment);
+        } catch (EnrollmentCapacityException e) {
+            System.err.println("[Handled checked exception] " + e.getMessage());
+        }
 
         displayService.printRole(admin);
         displayService.printRole(instructor);

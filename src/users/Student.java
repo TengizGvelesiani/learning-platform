@@ -2,6 +2,7 @@ package users;
 
 import contracts.Enrollable;
 import interactions.Enrollment;
+import materials.Course;
 
 public class Student extends User implements Enrollable {
 
@@ -34,6 +35,27 @@ public class Student extends User implements Enrollable {
         for (int i = 0; i < enrollments.length; i++) {
             if (enrollments[i] == null) {
                 enrollments[i] = enrollment;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isAlreadyEnrolledIn(Course course) {
+        if (course == null) {
+            return false;
+        }
+        for (Enrollment e : enrollments) {
+            if (e != null && course.equals(e.getCourse())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasFreeEnrollmentSlot() {
+        for (Enrollment e : enrollments) {
+            if (e == null) {
                 return true;
             }
         }
