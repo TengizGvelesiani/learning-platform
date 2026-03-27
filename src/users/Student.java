@@ -1,5 +1,8 @@
 package users;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import contracts.Enrollable;
 import interactions.Enrollment;
 import materials.Course;
@@ -7,12 +10,14 @@ import materials.Course;
 public class Student extends User implements Enrollable {
 
     private String username;
-    private Enrollment[] enrollments;
+    private final List<Enrollment> enrollments;
+    private final int maxEnrollments;
 
     public Student(String name, String surname, String email, String username, int maxEnrollments) {
         super(name, surname, email);
         this.username = username;
-        this.enrollments = new Enrollment[maxEnrollments];
+        this.maxEnrollments = maxEnrollments;
+        this.enrollments = new ArrayList<>();
     }
 
     public String getUsername() {
@@ -23,22 +28,17 @@ public class Student extends User implements Enrollable {
         this.username = username;
     }
 
-    public Enrollment[] getEnrollments() {
+    @Override
+    public List<Enrollment> getEnrollments() {
         return enrollments;
     }
 
-    public void setEnrollments(Enrollment[] enrollments) {
-        this.enrollments = enrollments;
-    }
-
     public boolean addEnrollment(Enrollment enrollment) {
-        for (int i = 0; i < enrollments.length; i++) {
-            if (enrollments[i] == null) {
-                enrollments[i] = enrollment;
-                return true;
-            }
+        if (enrollment == null || enrollments.size() >= maxEnrollments) {
+            return false;
         }
-        return false;
+        enrollments.add(enrollment);
+        return true;
     }
 
     public boolean isAlreadyEnrolledIn(Course course) {
@@ -46,7 +46,7 @@ public class Student extends User implements Enrollable {
             return false;
         }
         for (Enrollment e : enrollments) {
-            if (e != null && course.equals(e.getCourse())) {
+            if (course.equals(e.getCourse())) {
                 return true;
             }
         }
@@ -54,11 +54,6 @@ public class Student extends User implements Enrollable {
     }
 
     public boolean hasFreeEnrollmentSlot() {
-        for (Enrollment e : enrollments) {
-            if (e == null) {
-                return true;
-            }
-        }
-        return false;
+        return enrollments.size() < maxEnrollments;
     }
 }

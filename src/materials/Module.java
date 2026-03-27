@@ -1,13 +1,16 @@
 package materials;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Module extends Material {
 
-    private Lesson[] lessons;
+    private final List<Lesson> lessons;
     private Quiz quiz;
 
-    public Module(String name, Lesson[] lessons, Quiz quiz) {
+    public Module(String name, List<Lesson> lessons, Quiz quiz) {
         super(name);
-        this.lessons = lessons;
+        this.lessons = lessons != null ? new ArrayList<>(lessons) : new ArrayList<>();
         this.quiz = quiz;
     }
 
@@ -19,12 +22,8 @@ public class Module extends Material {
         this.name = name;
     }
 
-    public Lesson[] getLessons() {
+    public List<Lesson> getLessons() {
         return lessons;
-    }
-
-    public void setLessons(Lesson[] lessons) {
-        this.lessons = lessons;
     }
 
     public Quiz getQuiz() {

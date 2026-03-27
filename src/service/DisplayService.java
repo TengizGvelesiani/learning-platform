@@ -1,5 +1,7 @@
 package service;
 
+import java.util.List;
+
 import contracts.Enrollable;
 import contracts.Displayable;
 import contracts.MoneyMovable;
@@ -55,7 +57,7 @@ public final class DisplayService {
     }
 
     public void printEnrollmentCount(Enrollable enrollable) {
-        Enrollment[] enrollments = enrollable.getEnrollments();
+        List<Enrollment> enrollments = enrollable.getEnrollments();
         int count = 0;
         for (Enrollment e : enrollments) {
             if (e != null) {
@@ -65,4 +67,3 @@ public final class DisplayService {
         System.out.println(PREFIX + " Enrollment count: " + count);
     }
 }
-

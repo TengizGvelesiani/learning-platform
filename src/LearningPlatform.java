@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 import materials.Course;
 import users.Admin;
 import users.Instructor;
@@ -6,17 +9,18 @@ import users.Student;
 public class LearningPlatform {
 
     private String name;
-    private Course[] courses;
-    private Student[] students;
-    private Instructor[] instructors;
-    private Admin[] admins;
+    private final List<Course> courses;
+    private final List<Student> students;
+    private final List<Instructor> instructors;
+    private final List<Admin> admins;
 
-    public LearningPlatform(String name, Course[] courses, Student[] students, Instructor[] instructors, Admin[] admins) {
+    public LearningPlatform(String name, List<Course> courses, List<Student> students,
+                            List<Instructor> instructors, List<Admin> admins) {
         this.name = name;
-        this.courses = courses;
-        this.students = students;
-        this.instructors = instructors;
-        this.admins = admins;
+        this.courses = courses != null ? new ArrayList<>(courses) : new ArrayList<>();
+        this.students = students != null ? new ArrayList<>(students) : new ArrayList<>();
+        this.instructors = instructors != null ? new ArrayList<>(instructors) : new ArrayList<>();
+        this.admins = admins != null ? new ArrayList<>(admins) : new ArrayList<>();
     }
 
     public String getName() {
@@ -27,36 +31,19 @@ public class LearningPlatform {
         this.name = name;
     }
 
-    public Course[] getCourses() {
+    public List<Course> getCourses() {
         return courses;
     }
 
-    public void setCourses(Course[] courses) {
-        this.courses = courses;
-    }
-
-    public Student[] getStudents() {
+    public List<Student> getStudents() {
         return students;
     }
 
-    public void setStudents(Student[] students) {
-        this.students = students;
-    }
-
-    public Instructor[] getInstructors() {
+    public List<Instructor> getInstructors() {
         return instructors;
     }
 
-    public void setInstructors(Instructor[] instructors) {
-        this.instructors = instructors;
-    }
-
-    public Admin[] getAdmins() {
+    public List<Admin> getAdmins() {
         return admins;
     }
-
-    public void setAdmins(Admin[] admins) {
-        this.admins = admins;
-    }
 }
-

@@ -1,17 +1,20 @@
 package users;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import contracts.ProfileSummarizable;
 import materials.Course;
 
 public class Instructor extends Staff implements ProfileSummarizable {
 
     private double rating;
-    private Course[] coursesTaught;
+    private final List<Course> coursesTaught;
 
-    public Instructor(String email, String name, String surname, double rating, Course[] coursesTaught) {
+    public Instructor(String email, String name, String surname, double rating, List<Course> coursesTaught) {
         super(name, surname, email);
         this.rating = rating;
-        this.coursesTaught = coursesTaught;
+        this.coursesTaught = coursesTaught != null ? new ArrayList<>(coursesTaught) : new ArrayList<>();
     }
 
     public double getRating() {
@@ -22,12 +25,8 @@ public class Instructor extends Staff implements ProfileSummarizable {
         this.rating = rating;
     }
 
-    public Course[] getCoursesTaught() {
+    public List<Course> getCoursesTaught() {
         return coursesTaught;
-    }
-
-    public void setCoursesTaught(Course[] coursesTaught) {
-        this.coursesTaught = coursesTaught;
     }
 
     @Override

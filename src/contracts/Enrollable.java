@@ -1,9 +1,10 @@
 package contracts;
 
+import java.util.List;
+
 import interactions.Enrollment;
 
 public interface Enrollable {
 
-    Enrollment[] getEnrollments();
+    List<Enrollment> getEnrollments();
 }
-
