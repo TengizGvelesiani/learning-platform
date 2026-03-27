@@ -151,8 +151,8 @@ public class Main {
             System.out.println("List size after add: " + listDemo.size());
             Course firstListCourse = listDemo.get(0);
             System.out.println("First list course: " + firstListCourse.getTitle());
-            for (Course c : listDemo) {
-                System.out.println("List iteration: " + c.getDisplayName());
+            for (Course courseItem : listDemo) {
+                System.out.println("List iteration: " + courseItem.getDisplayName());
             }
             listDemo.remove(course);
             System.out.println("List size after remove: " + listDemo.size());
@@ -164,8 +164,8 @@ public class Main {
             Course firstSetCourse = featuredCourses.iterator().next();
             System.out.println("First set course: " + firstSetCourse.getTitle());
             System.out.println("Set size: " + featuredCourses.size());
-            for (Course c : featuredCourses) {
-                System.out.println("Set iteration: " + c.getTitle());
+            for (Course courseItem : featuredCourses) {
+                System.out.println("Set iteration: " + courseItem.getTitle());
             }
         }
 
@@ -178,8 +178,8 @@ public class Main {
             System.out.println("First map entry key email: " + firstEntry.getKey().getEmail());
             System.out.println("Map get: " + studentNotes.get(student));
             System.out.println("Map size: " + studentNotes.size());
-            for (Map.Entry<Student, String> e : studentNotes.entrySet()) {
-                System.out.println("Map iteration: " + e.getKey().getUsername() + " -> " + e.getValue());
+            for (Map.Entry<Student, String> entry : studentNotes.entrySet()) {
+                System.out.println("Map iteration: " + entry.getKey().getUsername() + " -> " + entry.getValue());
             }
             studentNotes.remove(otherStudent);
             System.out.println("Map size after remove: " + studentNotes.size());
@@ -191,21 +191,21 @@ public class Main {
             Course firstKey = seatsUsed.keySet().iterator().next();
             System.out.println("First map (course key) title: " + firstKey.getTitle());
             System.out.println("Map put/get seats: " + seatsUsed.get(course));
-            for (Map.Entry<Course, Integer> e : seatsUsed.entrySet()) {
-                System.out.println("Map iteration (course keys): " + e.getKey().getTitle() + " -> " + e.getValue());
+            for (Map.Entry<Course, Integer> entry : seatsUsed.entrySet()) {
+                System.out.println("Map iteration (course keys): " + entry.getKey().getTitle() + " -> " + entry.getValue());
             }
         }
 
         if (!catalog.isEmpty()) {
             System.out.println("Generic catalog first: " + catalog.get(0).getTitle());
-            for (Course c : catalog.getAll()) {
-                System.out.println("Catalog iteration: " + c.getDisplayName());
+            for (Course courseItem : catalog.getAll()) {
+                System.out.println("Catalog iteration: " + courseItem.getDisplayName());
             }
         }
 
         System.out.println("Linked list first: " + linkedLog.getFirst());
-        for (String s : linkedLog) {
-            System.out.println("Linked list iteration: " + s);
+        for (String logEntry : linkedLog) {
+            System.out.println("Linked list iteration: " + logEntry);
         }
     }
 }
