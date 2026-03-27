@@ -1,14 +1,17 @@
 package materials;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Quiz extends Material {
 
     private int timeLimitMinutes;
-    private Question[] questions;
+    private final List<Question> questions;
 
-    public Quiz(int limit, Question[] questions) {
+    public Quiz(int limit, List<Question> questions) {
         super("Quiz");
         this.timeLimitMinutes = limit;
-        this.questions = questions;
+        this.questions = questions != null ? new ArrayList<>(questions) : new ArrayList<>();
     }
 
     public int getTimeLimit() {
@@ -19,16 +22,12 @@ public class Quiz extends Material {
         this.timeLimitMinutes = limit;
     }
 
-    public Question[] getQuestions() {
+    public List<Question> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(Question[] questions) {
-        this.questions = questions;
-    }
-
     public int getNumberOfQuestions() {
-        return questions == null ? 0 : questions.length;
+        return questions.size();
     }
 
     @Override

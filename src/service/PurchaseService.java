@@ -79,6 +79,8 @@ public class PurchaseService {
             return enrollment;
         } catch (IOException e) {
             throw new IllegalStateException("Purchase audit log failed; enrollment may have completed.", e);
+        } finally {
+            System.out.println("Transaction attempt finished.");
         }
     }
 

@@ -1,6 +1,8 @@
 package materials;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import users.Instructor;
@@ -11,16 +13,16 @@ public class Course extends Material {
     private BigDecimal price;
     private Instructor instructor;
     private int limit;
-    private Module[] modules;
-    private Enrollment[] enrollments;
+    private final List<Module> modules;
+    private final List<Enrollment> enrollments;
 
-    public Course(String title, BigDecimal price, Instructor instructor, int limit, Module[] modules) {
+    public Course(String title, BigDecimal price, Instructor instructor, int limit, List<Module> modules) {
         super(title);
         this.price = price;
         this.instructor = instructor;
         this.limit = limit;
-        this.modules = modules;
-        this.enrollments = new Enrollment[limit];
+        this.modules = modules != null ? new ArrayList<>(modules) : new ArrayList<>();
+        this.enrollments = new ArrayList<>();
     }
 
     public String getTitle() {
@@ -55,57 +57,32 @@ public class Course extends Material {
         this.limit = limit;
     }
 
-    public Module[] getModules() {
+    public List<Module> getModules() {
         return modules;
     }
 
-    public void setModules(Module[] modules) {
-        this.modules = modules;
-    }
-
-    public Enrollment[] getEnrollments() {
+    public List<Enrollment> getEnrollments() {
         return enrollments;
     }
 
-    public void setEnrollments(Enrollment[] enrollments) {
-        this.enrollments = enrollments;
-    }
-
     public int getEnrolledStudentsCount() {
-        int count = 0;
-        for (Enrollment enrollment : enrollments) {
-            if (enrollment != null) {
-                count++;
-            }
-        }
-        return count;
+        return enrollments.size();
     }
 
     public boolean hasFreeSeat() {
-        return getEnrolledStudentsCount() < limit;
+        return enrollments.size() < limit;
     }
 
     public boolean addEnrollment(Enrollment enrollment) {
-        for (int i = 0; i < enrollments.length; i++) {
-            if (enrollments[i] == null) {
-                enrollments[i] = enrollment;
-                return true;
-            }
+        if (enrollment == null || enrollments.size() >= limit) {
+            return false;
         }
-        return false;
+        enrollments.add(enrollment);
+        return true;
     }
 
     public boolean removeEnrollment(Enrollment enrollment) {
-        if (enrollment == null) {
-            return false;
-        }
-        for (int i = 0; i < enrollments.length; i++) {
-            if (enrollments[i] == enrollment) {
-                enrollments[i] = null;
-                return true;
-            }
-        }
-        return false;
+        return enrollments.remove(enrollment);
     }
 
     @Override
