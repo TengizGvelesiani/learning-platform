@@ -5,22 +5,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import users.Instructor;
+import domain.CourseDifficulty;
+import domain.MaterialKind;
 import interactions.Enrollment;
+import users.Instructor;
 
 public class Course extends Material {
 
     private BigDecimal price;
     private Instructor instructor;
     private int limit;
+    private CourseDifficulty difficulty;
     private final List<Module> modules;
     private final List<Enrollment> enrollments;
 
-    public Course(String title, BigDecimal price, Instructor instructor, int limit, List<Module> modules) {
+    public Course(String title, BigDecimal price, Instructor instructor, int limit, List<Module> modules,
+                  CourseDifficulty difficulty) {
         super(title);
         this.price = price;
         this.instructor = instructor;
         this.limit = limit;
+        this.difficulty = difficulty != null ? difficulty : CourseDifficulty.BEGINNER;
         this.modules = modules != null ? new ArrayList<>(modules) : new ArrayList<>();
         this.enrollments = new ArrayList<>();
     }
@@ -57,6 +62,14 @@ public class Course extends Material {
         this.limit = limit;
     }
 
+    public CourseDifficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(CourseDifficulty difficulty) {
+        this.difficulty = difficulty != null ? difficulty : CourseDifficulty.BEGINNER;
+    }
+
     public List<Module> getModules() {
         return modules;
     }
@@ -88,6 +101,11 @@ public class Course extends Material {
     @Override
     public String getDisplayName() {
         return "Course: " + name;
+    }
+
+    @Override
+    public MaterialKind getMaterialKind() {
+        return MaterialKind.COURSE;
     }
 
     @Override

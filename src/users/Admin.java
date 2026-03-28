@@ -1,14 +1,17 @@
 package users;
 
 import contracts.ProfileSummarizable;
+import domain.StaffPermissionTier;
 
 public class Admin extends Staff implements ProfileSummarizable {
 
     private int accessLevel;
+    private StaffPermissionTier permissionTier;
 
     public Admin(String name, String surname, String email, int accessLevel) {
         super(name, surname, email);
         this.accessLevel = accessLevel;
+        this.permissionTier = StaffPermissionTier.fromAccessLevel(accessLevel);
     }
 
     public int getAccessLevel() {
@@ -17,6 +20,18 @@ public class Admin extends Staff implements ProfileSummarizable {
 
     public void setAccessLevel(int accessLevel) {
         this.accessLevel = accessLevel;
+        this.permissionTier = StaffPermissionTier.fromAccessLevel(accessLevel);
+    }
+
+    public StaffPermissionTier getPermissionTier() {
+        return permissionTier;
+    }
+
+    public void setPermissionTier(StaffPermissionTier permissionTier) {
+        if (permissionTier != null) {
+            this.permissionTier = permissionTier;
+            this.accessLevel = permissionTier.getMinLevel();
+        }
     }
 
     @Override
@@ -26,6 +41,7 @@ public class Admin extends Staff implements ProfileSummarizable {
 
     @Override
     public String getProfileSummary() {
-        return "Admin " + getContactLabel() + ", access level " + accessLevel;
+        return "Admin " + getContactLabel() + ", tier " + permissionTier.getDisplayName()
+                + ", access level " + accessLevel;
     }
 }

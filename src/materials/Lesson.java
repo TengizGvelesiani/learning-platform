@@ -1,5 +1,7 @@
 package materials;
 
+import domain.MaterialKind;
+
 public class Lesson extends Material {
 
     public Lesson(String content) {
@@ -17,5 +19,10 @@ public class Lesson extends Material {
     @Override
     public String getDisplayName() {
         return "Lesson: " + name;
+    }
+
+    @Override
+    public MaterialKind getMaterialKind() {
+        return MaterialKind.LESSON;
     }
 }

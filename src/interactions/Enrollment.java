@@ -3,21 +3,36 @@ package interactions;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import domain.EnrollmentLifecycleStatus;
 import materials.Course;
 
 public class Enrollment extends Record {
 
+    private EnrollmentLifecycleStatus lifecycleStatus;
     private Course course;
     private LocalDateTime enrolledAt;
     private Payment payment;
     private Certificate certificate;
 
-    public Enrollment(String status, Course course, LocalDateTime enrolledAt, Payment payment) {
-        super(status);
+    public Enrollment(EnrollmentLifecycleStatus lifecycleStatus, Course course, LocalDateTime enrolledAt,
+                      Payment payment) {
+        super(lifecycleStatus.getWireValue());
+        this.lifecycleStatus = lifecycleStatus;
         this.course = course;
         this.enrolledAt = enrolledAt;
         this.payment = payment;
         this.certificate = null;
+    }
+
+    public EnrollmentLifecycleStatus getLifecycleStatus() {
+        return lifecycleStatus;
+    }
+
+    public void setLifecycleStatus(EnrollmentLifecycleStatus lifecycleStatus) {
+        if (lifecycleStatus != null) {
+            this.lifecycleStatus = lifecycleStatus;
+            super.setStatus(lifecycleStatus.getWireValue());
+        }
     }
 
     public Course getCourse() {
@@ -50,6 +65,12 @@ public class Enrollment extends Record {
 
     public void setCertificate(Certificate certificate) {
         this.certificate = certificate;
+    }
+
+    @Override
+    public void setStatus(String status) {
+        super.setStatus(status);
+        this.lifecycleStatus = EnrollmentLifecycleStatus.fromWire(status);
     }
 
     @Override
