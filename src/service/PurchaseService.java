@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import exceptions.DuplicateEnrollmentException;
 import exceptions.EnrollmentCapacityException;
 import exceptions.InsufficientFundsException;
+import domain.EnrollmentLifecycleStatus;
 import exceptions.InvalidPurchaseArgumentException;
 import exceptions.PaymentAlreadyProcessedException;
 import interactions.Certificate;
@@ -47,9 +48,11 @@ public class PurchaseService {
         try (PurchaseAuditTrail audit = PurchaseAuditTrail.openDefault()) {
             audit.appendEvent("START | student=" + student.getUsername()
                     + " | course=" + course.getTitle()
-                    + " | amount=" + payment.getAmount());
+                    + " | amount=" + payment.getAmount()
+                    + " | channel=" + payment.getChannel().receiptTag());
 
-            Enrollment enrollment = new Enrollment("ACTIVE", course, LocalDateTime.now(), payment);
+            Enrollment enrollment = new Enrollment(EnrollmentLifecycleStatus.ACTIVE, course,
+                    LocalDateTime.now(), payment);
 
             boolean addedToCourse = course.addEnrollment(enrollment);
             boolean addedToStudent = student.addEnrollment(enrollment);
@@ -100,9 +103,11 @@ public class PurchaseService {
         System.out.println("\n--- Purchase Preview ---");
         validatePurchaseArguments(student, course, payment);
         System.out.println("Student: " + student.getUsername());
-        System.out.println("Course: " + course.getTitle());
+        System.out.println("Course: " + course.getTitle() + " (" + course.getDifficulty().getCatalogLabel() + ")");
         System.out.println("Price: " + course.getPrice());
         System.out.println("Payment amount: " + payment.getAmount());
+        System.out.println("Payment channel: " + payment.getChannel().receiptTag()
+                + ", est. processing fee: " + payment.getChannel().estimatedProcessingFee(payment.getAmount()));
         if (hasSufficientFunds(payment.getAmount(), course.getPrice())) {
             BigDecimal change = payment.getAmount().subtract(course.getPrice());
             System.out.println("Status: This purchase would be APPROVED. Change: " + change);

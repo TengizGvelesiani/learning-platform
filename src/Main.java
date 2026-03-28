@@ -8,6 +8,10 @@ import java.util.Map;
 import java.util.Set;
 
 import collections.SimpleLinkedList;
+import domain.CourseDifficulty;
+import domain.MaterialKind;
+import domain.PaymentChannel;
+import dto.CourseSummary;
 import exceptions.EnrollmentCapacityException;
 import exceptions.InsufficientFundsException;
 import interactions.Enrollment;
@@ -17,7 +21,11 @@ import materials.Lesson;
 import materials.Module;
 import materials.Question;
 import materials.Quiz;
+import functions.CourseEligibilityChecker;
+import functions.LearningOutcomeReporter;
+import functions.PricingAdjuster;
 import service.DisplayService;
+import service.PlatformAnalytics;
 import service.PlatformRegistry;
 import service.PurchaseService;
 import users.Admin;
@@ -62,13 +70,14 @@ public class Main {
                 new BigDecimal("99.00"),
                 instructor,
                 2,
-                courseModules
+                courseModules,
+                CourseDifficulty.BEGINNER
         );
 
         instructor.getCoursesTaught().add(course);
 
         Student student = new Student("Ana", "Johnson", "student@example.com", "anaJ", 3);
-        Payment payment = new Payment(new BigDecimal("120.00"));
+        Payment payment = new Payment(new BigDecimal("120.00"), PaymentChannel.CARD);
 
         List<Course> platformCourses = new ArrayList<>();
         platformCourses.add(course);
@@ -123,6 +132,9 @@ public class Main {
         displayService.printEnrollmentCount(student);
         if (enrollment != null) {
             displayService.printStatus(enrollment);
+            System.out.println("Enrollment lifecycle enum: " + enrollment.getLifecycleStatus()
+                    + ", content access: "
+                    + enrollment.getLifecycleStatus().studentMayAccessContent(student, course));
             if (enrollment.getCertificate() != null) {
                 displayService.printStatus(enrollment.getCertificate());
             }
@@ -139,6 +151,64 @@ public class Main {
         eventLog.add("purchase-flow");
 
         demonstrateCollections(platform, student, lowBalanceStudent, course, purchaseAnchor, materialCatalog, eventLog);
+        demonstrateLambdasEnumsAndSummary(platform, student, lowBalanceStudent, course, payment, module);
+    }
+
+    private static void demonstrateLambdasEnumsAndSummary(LearningPlatform platform, Student student,
+                                                          Student prospectStudent, Course course,
+                                                          Payment payment, Module module) {
+        CourseSummary summary = CourseSummary.from(course);
+        System.out.println("\n--- CourseSummary (immutable DTO) ---");
+        System.out.println(summary);
+        System.out.println("CourseSummary title: " + summary.getTitle() + ", open seats: " + summary.getOpenSeats());
+
+        CourseEligibilityChecker eligibility = (s, c) -> s.hasFreeEnrollmentSlot() && c.hasFreeSeat()
+                && c.getDifficulty().instructorCanTeach(c.getInstructor());
+        System.out.println("Custom CourseEligibilityChecker: " + eligibility.eligible(student, course));
+
+        LearningOutcomeReporter outcomeReporter = (material, detail) -> System.out.println(
+                "[OUTCOME] " + material.getMaterialKind().formatItemName(material.getName()) + " -> " + detail);
+        outcomeReporter.report(module, "module progress checkpoint");
+
+        PricingAdjuster introDiscount = (base, c) ->
+                c.getDifficulty() == CourseDifficulty.BEGINNER
+                        ? base.multiply(new BigDecimal("0.95"))
+                        : base;
+        System.out.println("Custom PricingAdjuster (5% off beginner): "
+                + introDiscount.adjust(course.getPrice(), course));
+
+        System.out.println("\n--- java.util.function via PlatformAnalytics ---");
+        PlatformAnalytics.printSpotlightDigest(
+                platform.getCourses(),
+                c -> c.getDifficulty().getRank() <= CourseDifficulty.INTERMEDIATE.getRank(),
+                c -> c.getTitle() + " @ " + c.getPrice(),
+                line -> " * " + line,
+                System.out::println,
+                () -> "[Analytics] Spotlight catalog lines");
+
+        BigDecimal foldedPrices = PlatformAnalytics.reduceCoursePrices(
+                platform.getCourses(),
+                Course::getPrice,
+                BigDecimal::add,
+                () -> BigDecimal.ZERO);
+        System.out.println("[Analytics] Folded list prices (BinaryOperator sum): " + foldedPrices);
+
+        List<Course> suggested = PlatformAnalytics.recommendCourses(
+                platform.getCourses(),
+                prospectStudent,
+                (s, c) -> !s.isAlreadyEnrolledIn(c) && c.getMaterialKind() == MaterialKind.COURSE);
+        System.out.println("[Analytics] BiPredicate recommendations for prospect (not enrolled): " + suggested.size());
+
+        System.out.println("Admin tier: " + adminTierLabel(platform));
+        System.out.println("Payment channel " + payment.getChannel().receiptTag()
+                + ", est. fee: " + payment.getChannel().estimatedProcessingFee(payment.getAmount()));
+    }
+
+    private static String adminTierLabel(LearningPlatform platform) {
+        if (platform.getAdmins().isEmpty()) {
+            return "n/a";
+        }
+        return platform.getAdmins().get(0).getPermissionTier().getDisplayName();
     }
 
     private static void demonstrateCollections(LearningPlatform platform, Student student, Student otherStudent,

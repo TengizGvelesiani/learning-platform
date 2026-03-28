@@ -1,6 +1,8 @@
 package materials;
 
 import contracts.Displayable;
+import domain.MaterialKind;
+
 import java.util.Objects;
 
 public abstract class Material implements Displayable {
@@ -20,6 +22,8 @@ public abstract class Material implements Displayable {
     }
 
     public abstract String getDisplayName();
+
+    public abstract MaterialKind getMaterialKind();
 
     @Override
     public String toString() {

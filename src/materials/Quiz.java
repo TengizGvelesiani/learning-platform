@@ -3,6 +3,8 @@ package materials;
 import java.util.ArrayList;
 import java.util.List;
 
+import domain.MaterialKind;
+
 public class Quiz extends Material {
 
     private int timeLimitMinutes;
@@ -33,5 +35,10 @@ public class Quiz extends Material {
     @Override
     public String getDisplayName() {
         return "Quiz (" + getNumberOfQuestions() + " questions, " + timeLimitMinutes + " min)";
+    }
+
+    @Override
+    public MaterialKind getMaterialKind() {
+        return MaterialKind.QUIZ;
     }
 }

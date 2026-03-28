@@ -3,6 +3,8 @@ package materials;
 import java.util.ArrayList;
 import java.util.List;
 
+import domain.MaterialKind;
+
 public class Module extends Material {
 
     private final List<Lesson> lessons;
@@ -37,5 +39,10 @@ public class Module extends Material {
     @Override
     public String getDisplayName() {
         return "Module: " + name;
+    }
+
+    @Override
+    public MaterialKind getMaterialKind() {
+        return MaterialKind.MODULE;
     }
 }
