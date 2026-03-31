@@ -3,6 +3,8 @@ package service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
@@ -71,5 +73,33 @@ public final class PlatformAnalytics {
             }
         }
         return out;
+    }
+
+    public static List<String> describeCourseMatches(
+            List<Course> catalog,
+            Student student,
+            BiPredicate<Student, Course> match,
+            BiFunction<Student, Course, String> describer,
+            BiConsumer<Student, Course> onMatch) {
+        List<String> lines = new ArrayList<>();
+        if (catalog == null || student == null || match == null || describer == null || onMatch == null) {
+            return lines;
+        }
+        for (Course c : catalog) {
+            if (match.test(student, c)) {
+                onMatch.accept(student, c);
+                lines.add(describer.apply(student, c));
+            }
+        }
+        return lines;
+    }
+
+    public static void runNamedTask(String label, Runnable task, Consumer<String> sink) {
+        if (label == null || task == null || sink == null) {
+            return;
+        }
+        sink.accept("[Analytics] Starting task: " + label);
+        task.run();
+        sink.accept("[Analytics] Finished task: " + label);
     }
 }

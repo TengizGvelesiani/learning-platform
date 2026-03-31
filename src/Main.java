@@ -199,6 +199,22 @@ public class Main {
                 (s, c) -> !s.isAlreadyEnrolledIn(c) && c.getMaterialKind() == MaterialKind.COURSE);
         System.out.println("[Analytics] BiPredicate recommendations for prospect (not enrolled): " + suggested.size());
 
+        List<String> suggestionLines = PlatformAnalytics.describeCourseMatches(
+                platform.getCourses(),
+                prospectStudent,
+                (s, c) -> !s.isAlreadyEnrolledIn(c) && c.getMaterialKind() == MaterialKind.COURSE,
+                (s, c) -> s.getUsername() + " can enroll in " + c.getTitle() + " (" + c.getDifficulty().name() + ")",
+                (s, c) -> System.out.println("[Analytics] BiConsumer matched " + s.getUsername()
+                        + " with " + c.getTitle()));
+        for (String line : suggestionLines) {
+            System.out.println("[Analytics] BiFunction detail: " + line);
+        }
+
+        PlatformAnalytics.runNamedTask(
+                "Runnable purchase readiness check",
+                () -> System.out.println("[Analytics] Prospect slots available: " + prospectStudent.hasFreeEnrollmentSlot()),
+                System.out::println);
+
         System.out.println("Admin tier: " + adminTierLabel(platform));
         System.out.println("Payment channel " + payment.getChannel().receiptTag()
                 + ", est. fee: " + payment.getChannel().estimatedProcessingFee(payment.getAmount()));
