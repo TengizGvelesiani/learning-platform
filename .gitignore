@@ -11,6 +11,7 @@ out/
 
 target/
 build/
+.tools/
 
 *.swp
 *.swo
