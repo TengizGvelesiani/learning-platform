@@ -1,5 +1,8 @@
 package com.tengo.learningplatform.domain;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.tengo.learningplatform.users.Instructor;
 
 
@@ -36,8 +39,10 @@ public enum CourseDifficulty {
         }
     };
 
+    private static final Logger LOGGER = LogManager.getLogger(CourseDifficulty.class);
+
     static {
-        System.out.println("[domain] CourseDifficulty enum type ready.");
+        LOGGER.info("[domain] CourseDifficulty enum type ready.");
     }
 
     private final int rank;

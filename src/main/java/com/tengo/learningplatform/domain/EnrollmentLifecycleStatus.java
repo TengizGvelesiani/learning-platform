@@ -2,6 +2,9 @@ package com.tengo.learningplatform.domain;
 
 import java.util.Arrays;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.tengo.learningplatform.materials.Course;
 import com.tengo.learningplatform.users.Student;
 
@@ -49,8 +52,10 @@ public enum EnrollmentLifecycleStatus {
         }
     };
 
+    private static final Logger LOGGER = LogManager.getLogger(EnrollmentLifecycleStatus.class);
+
     static {
-        System.out.println("[domain] EnrollmentLifecycleStatus loaded.");
+        LOGGER.info("[domain] EnrollmentLifecycleStatus loaded.");
     }
 
     private final String wireValue;

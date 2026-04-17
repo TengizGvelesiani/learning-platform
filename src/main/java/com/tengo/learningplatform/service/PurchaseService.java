@@ -5,6 +5,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.tengo.learningplatform.annotations.ReflectiveTask;
 import com.tengo.learningplatform.domain.EnrollmentLifecycleStatus;
 import com.tengo.learningplatform.exceptions.DuplicateEnrollmentException;
@@ -23,9 +26,11 @@ import com.tengo.learningplatform.users.Student;
 @ReflectiveTask("Purchase flow orchestration")
 public class PurchaseService {
 
+    private static final Logger LOGGER = LogManager.getLogger(PurchaseService.class);
+
     public Enrollment buyCourse(Student student, Course course, Payment payment)
             throws EnrollmentCapacityException {
-        System.out.println("\n--- Starting Transaction ---");
+        LOGGER.info("--- Starting Transaction ---");
         validatePurchaseArguments(student, course, payment);
 
         if (payment.isProcessed()) {
@@ -77,8 +82,8 @@ public class PurchaseService {
             audit.appendEvent("SUCCESS | student=" + student.getUsername()
                     + " | course=" + course.getTitle());
 
-            System.out.println("Payment Approved for: " + student.getContactLabel());
-            System.out.println("Course: " + course.getTitle() + " has been added to dashboard.");
+            LOGGER.info("Payment Approved for: {}", student.getContactLabel());
+            LOGGER.info("Course: {} has been added to dashboard.", course.getTitle());
 
             Certificate certificate = new Certificate(LocalDate.now(), student, course);
             enrollment.setCertificate(certificate);
@@ -87,7 +92,7 @@ public class PurchaseService {
         } catch (IOException e) {
             throw new IllegalStateException("Purchase audit log failed; enrollment may have completed.", e);
         } finally {
-            System.out.println("Transaction attempt finished.");
+            LOGGER.info("Transaction attempt finished.");
         }
     }
 
@@ -104,19 +109,19 @@ public class PurchaseService {
     }
 
     public void previewPurchase(Student student, Course course, Payment payment) {
-        System.out.println("\n--- Purchase Preview ---");
+        LOGGER.info("--- Purchase Preview ---");
         validatePurchaseArguments(student, course, payment);
-        System.out.println("Student: " + student.getUsername());
-        System.out.println("Course: " + course.getTitle() + " (" + course.getDifficulty().getCatalogLabel() + ")");
-        System.out.println("Price: " + course.getPrice());
-        System.out.println("Payment amount: " + payment.getAmount());
-        System.out.println("Payment channel: " + payment.getChannel().receiptTag()
-                + ", est. processing fee: " + payment.getChannel().estimatedProcessingFee(payment.getAmount()));
+        LOGGER.info("Student: {}", student.getUsername());
+        LOGGER.info("Course: {} ({})", course.getTitle(), course.getDifficulty().getCatalogLabel());
+        LOGGER.info("Price: {}", course.getPrice());
+        LOGGER.info("Payment amount: {}", payment.getAmount());
+        LOGGER.info("Payment channel: {}, est. processing fee: {}",
+                payment.getChannel().receiptTag(), payment.getChannel().estimatedProcessingFee(payment.getAmount()));
         if (hasSufficientFunds(payment.getAmount(), course.getPrice())) {
             BigDecimal change = payment.getAmount().subtract(course.getPrice());
-            System.out.println("Status: This purchase would be APPROVED. Change: " + change);
+            LOGGER.info("Status: This purchase would be APPROVED. Change: {}", change);
         } else {
-            System.out.println("Status: This purchase would be DECLINED (insufficient funds).");
+            LOGGER.info("Status: This purchase would be DECLINED (insufficient funds).");
         }
     }
 

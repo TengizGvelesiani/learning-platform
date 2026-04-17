@@ -2,6 +2,8 @@ package com.tengo.learningplatform.domain;
 
 import java.util.Arrays;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public enum StaffPermissionTier {
 
@@ -36,8 +38,10 @@ public enum StaffPermissionTier {
         }
     };
 
+    private static final Logger LOGGER = LogManager.getLogger(StaffPermissionTier.class);
+
     static {
-        System.out.println("[domain] StaffPermissionTier tiers initialized.");
+        LOGGER.info("[domain] StaffPermissionTier tiers initialized.");
     }
 
     private final int minLevel;

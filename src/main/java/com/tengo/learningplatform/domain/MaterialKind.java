@@ -1,5 +1,7 @@
 package com.tengo.learningplatform.domain;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public enum MaterialKind {
 
@@ -26,13 +28,14 @@ public enum MaterialKind {
 
     private final String singularKey;
     private final String pluralLabel;
+    private static final Logger LOGGER = LogManager.getLogger(MaterialKind.class);
 
     static {
         int kinds = values().length;
         if (kinds < 4) {
             throw new IllegalStateException("MaterialKind registry incomplete");
         }
-        System.out.println("[domain] MaterialKind registry size=" + kinds);
+        LOGGER.info("[domain] MaterialKind registry size={}", kinds);
     }
 
     MaterialKind(String singularKey, String pluralLabel) {

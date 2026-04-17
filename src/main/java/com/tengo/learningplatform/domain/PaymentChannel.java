@@ -3,6 +3,8 @@ package com.tengo.learningplatform.domain;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public enum PaymentChannel {
 
@@ -10,8 +12,10 @@ public enum PaymentChannel {
     BANK_TRANSFER(new BigDecimal("0.00"), "ACH"),
     PLATFORM_CREDIT(new BigDecimal("0.00"), "CREDIT");
 
+    private static final Logger LOGGER = LogManager.getLogger(PaymentChannel.class);
+
     static {
-        System.out.println("[domain] PaymentChannel fee table ready.");
+        LOGGER.info("[domain] PaymentChannel fee table ready.");
     }
 
     private final BigDecimal feeRate;

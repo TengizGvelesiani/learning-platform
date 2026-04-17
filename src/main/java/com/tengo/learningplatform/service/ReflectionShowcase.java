@@ -7,6 +7,9 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.tengo.learningplatform.annotations.ReflectiveTask;
 import com.tengo.learningplatform.interactions.Payment;
 import com.tengo.learningplatform.materials.Course;
@@ -15,22 +18,24 @@ import com.tengo.learningplatform.users.Student;
 
 public final class ReflectionShowcase {
 
+    private static final Logger LOGGER = LogManager.getLogger(ReflectionShowcase.class);
+
     private ReflectionShowcase() {
     }
 
     public static void run(Student student, Course course, Payment payment) {
-        System.out.println("\n--- Reflection Showcase ---");
+        LOGGER.info("--- Reflection Showcase ---");
         printTypeMetadata(PurchaseService.class);
         printTypeMetadata(Course.class);
         invokeAnnotatedPurchaseCheck(student, course, payment);
     }
 
     private static void printTypeMetadata(Class<?> type) {
-        System.out.println("[Reflect] Type: " + type.getName());
-        System.out.println("[Reflect] Modifiers: " + Modifier.toString(type.getModifiers()));
+        LOGGER.info("[Reflect] Type: {}", type.getName());
+        LOGGER.info("[Reflect] Modifiers: {}", Modifier.toString(type.getModifiers()));
         ReflectiveTask typeTask = type.getAnnotation(ReflectiveTask.class);
         if (typeTask != null) {
-            System.out.println("[Reflect] Annotation: " + typeTask.value());
+            LOGGER.info("[Reflect] Annotation: {}", typeTask.value());
         }
         Arrays.stream(type.getDeclaredFields())
                 .forEach(ReflectionShowcase::printField);
@@ -41,18 +46,16 @@ public final class ReflectionShowcase {
     }
 
     private static void printField(Field field) {
-        System.out.println("[Reflect] FIELD " + Modifier.toString(field.getModifiers())
-                + " " + field.getType().getSimpleName()
-                + " " + field.getName());
+        LOGGER.info("[Reflect] FIELD {} {} {}", Modifier.toString(field.getModifiers()),
+                field.getType().getSimpleName(), field.getName());
     }
 
     private static void printConstructor(Constructor<?> constructor) {
         String params = Arrays.stream(constructor.getParameterTypes())
                 .map(Class::getSimpleName)
                 .collect(Collectors.joining(", "));
-        System.out.println("[Reflect] CTOR " + Modifier.toString(constructor.getModifiers())
-                + " " + constructor.getName()
-                + "(" + params + ")");
+        LOGGER.info("[Reflect] CTOR {} {}({})", Modifier.toString(constructor.getModifiers()),
+                constructor.getName(), params);
     }
 
     private static void printMethod(Method method) {
@@ -61,11 +64,12 @@ public final class ReflectionShowcase {
                 .collect(Collectors.joining(", "));
         ReflectiveTask marker = method.getAnnotation(ReflectiveTask.class);
         String annotationLabel = marker == null ? "-" : marker.value();
-        System.out.println("[Reflect] METHOD " + Modifier.toString(method.getModifiers())
-                + " " + method.getReturnType().getSimpleName()
-                + " " + method.getName()
-                + "(" + params + ")"
-                + " annotation=" + annotationLabel);
+        LOGGER.info("[Reflect] METHOD {} {} {}({}) annotation={}",
+                Modifier.toString(method.getModifiers()),
+                method.getReturnType().getSimpleName(),
+                method.getName(),
+                params,
+                annotationLabel);
     }
 
     private static void invokeAnnotatedPurchaseCheck(Student student, Course course, Payment payment) {
@@ -79,7 +83,7 @@ public final class ReflectionShowcase {
                     .findFirst()
                     .orElseThrow();
             Object result = methodToInvoke.invoke(service, payment.getAmount(), course.getPrice());
-            System.out.println("[Reflect] Invoked " + methodToInvoke.getName() + " result: " + result);
+            LOGGER.info("[Reflect] Invoked {} result: {}", methodToInvoke.getName(), result);
             Method preview = type.getDeclaredMethod("previewPurchase", Student.class, Course.class, Payment.class);
             preview.invoke(service, student, course, payment);
         } catch (Exception e) {
