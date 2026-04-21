@@ -31,6 +31,7 @@ import com.tengo.learningplatform.materials.Question;
 import com.tengo.learningplatform.materials.Quiz;
 import com.tengo.learningplatform.service.DisplayService;
 import com.tengo.learningplatform.service.BookWordStatsService;
+import com.tengo.learningplatform.service.ConcurrencyHomeworkService;
 import com.tengo.learningplatform.service.PlatformAnalytics;
 import com.tengo.learningplatform.service.PlatformRegistry;
 import com.tengo.learningplatform.service.PurchaseService;
@@ -164,6 +165,7 @@ public class Main {
         demonstrateLambdasEnumsAndSummary(platform, student, lowBalanceStudent, course, payment, module);
         ReflectionShowcase.run(student, course, payment);
         new BookWordStatsService().writeUniqueWordCount("to_kill_a_mockingbird.txt", "logs/unique-words.txt");
+        new ConcurrencyHomeworkService().runShowcase();
     }
 
     private static void demonstrateLambdasEnumsAndSummary(LearningPlatform platform, Student student,
