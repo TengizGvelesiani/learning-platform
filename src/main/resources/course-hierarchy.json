@@ -1,0 +1,34 @@
+{
+  "title": "Intro to Java",
+  "price": 99.00,
+  "limit": 25,
+  "difficulty": "BEGINNER",
+  "createdAt": "2026-05-08T14:00:00",
+  "modules": [
+    {
+      "moduleName": "Java Basics",
+      "published": true,
+      "lessons": [
+        {
+          "content": "Variables and types",
+          "practical": false
+        },
+        {
+          "content": "If/else and loops",
+          "practical": true
+        }
+      ],
+      "quiz": {
+        "timeLimitMinutes": 15,
+        "questions": [
+          {
+            "text": "What is the size of int in Java?"
+          },
+          {
+            "text": "What does JVM stand for?"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -36,6 +36,10 @@ import com.tengo.learningplatform.service.PlatformAnalytics;
 import com.tengo.learningplatform.service.PlatformRegistry;
 import com.tengo.learningplatform.service.PurchaseService;
 import com.tengo.learningplatform.service.ReflectionShowcase;
+import com.tengo.learningplatform.parser.JacksonParser;
+import com.tengo.learningplatform.parser.JaxbParser;
+import com.tengo.learningplatform.parser.Parser;
+import com.tengo.learningplatform.parser.SaxParser;
 import com.tengo.learningplatform.users.Admin;
 import com.tengo.learningplatform.users.Instructor;
 import com.tengo.learningplatform.users.Student;
@@ -164,8 +168,29 @@ public class Main {
         demonstrateCollections(platform, student, lowBalanceStudent, course, purchaseAnchor, materialCatalog, eventLog);
         demonstrateLambdasEnumsAndSummary(platform, student, lowBalanceStudent, course, payment, module);
         ReflectionShowcase.run(student, course, payment);
+        demonstrateParsingHomework();
         new BookWordStatsService().writeUniqueWordCount("to_kill_a_mockingbird.txt", "logs/unique-words.txt");
         new ConcurrencyHomeworkService().runShowcase();
+    }
+
+    private static void demonstrateParsingHomework() {
+        LOGGER.info("\n--- Parsing homework demo (SAX, JAXB, Jackson) ---");
+        try {
+            Parser saxParser = new SaxParser();
+            Course saxCourse = saxParser.parse("/course-hierarchy.xml");
+            LOGGER.info("[SAX] Parsed course: " + saxCourse.getTitle() + ", modules: " + saxCourse.getModules().size());
+
+            Parser jaxbParser = new JaxbParser();
+            Course jaxbCourse = jaxbParser.parse("/course-hierarchy.xml");
+            LOGGER.info("[JAXB] Parsed course: " + jaxbCourse.getTitle() + ", modules: " + jaxbCourse.getModules().size());
+
+            Parser jacksonParser = new JacksonParser();
+            Course jacksonCourse = jacksonParser.parse("/course-hierarchy.json");
+            LOGGER.info("[Jackson] Parsed course: " + jacksonCourse.getTitle()
+                    + ", modules: " + jacksonCourse.getModules().size());
+        } catch (Exception e) {
+            LOGGER.error("Parser demo failed", e);
+        }
     }
 
     private static void demonstrateLambdasEnumsAndSummary(LearningPlatform platform, Student student,

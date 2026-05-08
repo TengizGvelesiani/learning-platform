@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<course>
+    <title>Intro to Java</title>
+    <price>99.00</price>
+    <limit>25</limit>
+    <difficulty>BEGINNER</difficulty>
+    <createdAt>2026-05-08T14:00:00</createdAt>
+    <modules>
+        <module>
+            <moduleName>Java Basics</moduleName>
+            <published>true</published>
+            <lessons>
+                <lesson>
+                    <content>Variables and types</content>
+                    <practical>false</practical>
+                </lesson>
+                <lesson>
+                    <content>If/else and loops</content>
+                    <practical>true</practical>
+                </lesson>
+            </lessons>
+            <quiz>
+                <timeLimitMinutes>15</timeLimitMinutes>
+                <questions>
+                    <question>
+                        <text>What is the size of int in Java?</text>
+                    </question>
+                    <question>
+                        <text>What does JVM stand for?</text>
+                    </question>
+                </questions>
+            </quiz>
+        </module>
+    </modules>
+</course>

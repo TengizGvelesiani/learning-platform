@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:element name="course" type="courseType"/>
+
+    <xs:complexType name="courseType">
+        <xs:sequence>
+            <xs:element name="title" type="xs:string"/>
+            <xs:element name="price" type="xs:decimal"/>
+            <xs:element name="limit" type="xs:int"/>
+            <xs:element name="difficulty" type="xs:string"/>
+            <xs:element name="createdAt" type="xs:dateTime"/>
+            <xs:element name="modules" type="modulesType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="modulesType">
+        <xs:sequence>
+            <xs:element name="module" type="moduleType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="moduleType">
+        <xs:sequence>
+            <xs:element name="moduleName" type="xs:string"/>
+            <xs:element name="published" type="xs:boolean"/>
+            <xs:element name="lessons" type="lessonsType"/>
+            <xs:element name="quiz" type="quizType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="lessonsType">
+        <xs:sequence>
+            <xs:element name="lesson" type="lessonType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="lessonType">
+        <xs:sequence>
+            <xs:element name="content" type="xs:string"/>
+            <xs:element name="practical" type="xs:boolean"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="quizType">
+        <xs:sequence>
+            <xs:element name="timeLimitMinutes" type="xs:int"/>
+            <xs:element name="questions" type="questionsType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="questionsType">
+        <xs:sequence>
+            <xs:element name="question" type="questionType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="questionType">
+        <xs:sequence>
+            <xs:element name="text" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
